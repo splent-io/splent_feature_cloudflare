@@ -1,0 +1,45 @@
+{% extends "base_template.html" %}
+
+{% block title %}Captcha{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-0">Captcha — Cloudflare Turnstile</h1>
+        <p class="text-muted mb-0">Keys used to protect forms from spam. Editable here, no .env edit needed.</p>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+        <div class="alert alert-{{ 'danger' if category == 'danger' else 'success' }} py-2">{{ message }}</div>
+    {% endfor %}
+{% endwith %}
+
+<form method="POST" class="card">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-12">
+                <label class="form-label" for="site_key">Site key</label>
+                <input id="site_key" name="site_key" class="form-control" value="{{ setting('turnstile_site_key', '') }}" placeholder="1x00000000000000000000AA">
+                <div class="form-text">Public key, rendered in the page next to the widget.</div>
+            </div>
+            <div class="col-12">
+                <label class="form-label" for="secret_key">Secret key</label>
+                <input id="secret_key" name="secret_key" type="password" class="form-control" value="{{ setting('turnstile_secret_key', '') }}" placeholder="1x0000000000000000000000000000000AA">
+                <div class="form-text">Private key, used server-side to verify submissions. Keep it secret.</div>
+            </div>
+            <div class="col-12">
+                <div class="alert alert-info mb-0 py-2">
+                    Cloudflare's official <strong>test keys</strong> are used by default, so development works out of the box (they always pass).
+                    Get real keys for production from your
+                    <a href="https://dash.cloudflare.com/?to=/:account/turnstile" target="_blank" rel="noopener">Cloudflare Turnstile dashboard</a>.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-end">
+        <button class="btn btn-primary" type="submit">Save</button>
+    </div>
+</form>
+{% endblock %}

@@ -2,6 +2,8 @@ import requests
 from flask import current_app
 from markupsafe import Markup
 
+from splent_framework.services.service_locator import service_proxy
+
 VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
 
 
@@ -12,10 +14,28 @@ class CloudflareService:
     ``CaptchaService`` name so consumers stay provider-agnostic. Templates use
     the captcha_widget()/captcha_script() helpers; routes call
     ``verify(token, remoteip)`` before accepting a submission.
+
+    Keys are read from the admin-editable SettingsService first (so they can be
+    changed at runtime from the admin panel), falling back to the product's
+    config/.env (TURNSTILE_SITE_KEY / TURNSTILE_SECRET_KEY).
     """
 
+    def _setting(self, key):
+        """Read an admin-editable setting, tolerating an absent SettingsService."""
+        try:
+            return service_proxy("SettingsService").get(key, None)
+        except Exception:
+            return None
+
     def site_key(self):
-        return current_app.config.get("TURNSTILE_SITE_KEY", "")
+        return self._setting("turnstile_site_key") or current_app.config.get(
+            "TURNSTILE_SITE_KEY", ""
+        )
+
+    def secret_key(self):
+        return self._setting("turnstile_secret_key") or current_app.config.get(
+            "TURNSTILE_SECRET_KEY", ""
+        )
 
     def enabled(self):
         return bool(self.site_key())
@@ -41,7 +61,7 @@ class CloudflareService:
 
         If no secret is configured, returns True (does not block submissions).
         """
-        secret = current_app.config.get("TURNSTILE_SECRET_KEY", "")
+        secret = self.secret_key()
         if not secret:
             return True
         if not token:
