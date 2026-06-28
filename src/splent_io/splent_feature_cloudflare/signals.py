@@ -14,3 +14,11 @@ def validate_turnstile(sender, form=None, remoteip=None, **kwargs):
 
     token = form.get("cf-turnstile-response") if form else None
     return CloudflareService().verify(token, remoteip)
+
+
+@connect_signal("contact-submitting", "splent_feature_cloudflare")
+def validate_turnstile_contact(sender, form=None, remoteip=None, **kwargs):
+    from splent_io.splent_feature_cloudflare.services import CloudflareService
+
+    token = form.get("cf-turnstile-response") if form else None
+    return CloudflareService().verify(token, remoteip)
