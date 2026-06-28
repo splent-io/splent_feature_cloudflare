@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "splent_feature_cloudflare"
-version = "0.0.1"
+version = "0.1.0"
 readme = "README.md"
 requires-python = ">=3.13"
 
@@ -23,22 +23,30 @@ exclude = ["*.tests", "*.tests.*"]
 [tool.splent]
 cli_version = "1.11.0"
 
+# ── Feature Contract (auto-generated) ────────────────────────────────────────
+# Do not edit manually — re-run `splent feature:contract --write` to refresh.
 [tool.splent.contract]
 description = "cloudflare feature"
 
 [tool.splent.contract.provides]
-routes = []
+routes     = ["/admin/captcha"]
 blueprints = []
-models = []
-commands = []
+models     = []
+commands   = ["hello"]
+hooks      = ["layout.authenticated_sidebar"]
+services   = []
+signals    = []
+translations = []
+docker     = []
 
 [tool.splent.contract.requires]
 features = []
-env_vars = []
+env_vars = ["TURNSTILE_SECRET_KEY", "TURNSTILE_SITE_KEY"]
+signals  = ["comment-submitting", "contact-submitting"]
 
 [tool.splent.contract.extensible]
-services = []
-templates = []
-models = []
-hooks = []
-routes = false
+services  = []
+templates = ["cloudflare/admin/settings.html"]
+models    = []
+hooks     = ["layout.authenticated_sidebar"]
+routes    = false

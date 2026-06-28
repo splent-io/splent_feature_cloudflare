@@ -16,8 +16,6 @@ def inject_config(app):
     app.config.update(
         {
             "TURNSTILE_SITE_KEY": os.getenv("TURNSTILE_SITE_KEY", _TEST_SITE_KEY),
-            "TURNSTILE_SECRET_KEY": os.getenv(
-                "TURNSTILE_SECRET_KEY", _TEST_SECRET_KEY
-            ),
+            "TURNSTILE_SECRET_KEY": os.getenv("TURNSTILE_SECRET_KEY", _TEST_SECRET_KEY),
         }
     )
