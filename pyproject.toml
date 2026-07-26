@@ -25,8 +25,11 @@ cli_version = "1.11.0"
 
 # ── Feature Contract (auto-generated) ────────────────────────────────────────
 # Do not edit manually — re-run `splent feature:contract --write` to refresh.
+# Preserved across refreshes: description, category, tags, env, and
+# requires.features_manual (dependencies invisible to static analysis).
 [tool.splent.contract]
-description = "cloudflare feature"
+description = "Cloudflare Turnstile captcha protection for comment and contact forms"
+archetype = "light"
 
 [tool.splent.contract.provides]
 routes     = ["/admin/captcha"]
@@ -34,18 +37,18 @@ blueprints = []
 models     = []
 commands   = ["hello"]
 hooks      = ["layout.authenticated_sidebar"]
-services   = []
+services   = ["CaptchaService"]
 signals    = []
 translations = []
 docker     = []
 
 [tool.splent.contract.requires]
-features = []
+features = ["settings"]
 env_vars = ["TURNSTILE_SECRET_KEY", "TURNSTILE_SITE_KEY"]
 signals  = ["comment-submitting", "contact-submitting"]
 
 [tool.splent.contract.extensible]
-services  = []
+services  = ["CaptchaService"]
 templates = ["cloudflare/admin/settings.html"]
 models    = []
 hooks     = ["layout.authenticated_sidebar"]
