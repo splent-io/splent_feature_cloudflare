@@ -55,3 +55,11 @@ templates = ["cloudflare/admin/settings.html"]
 models    = []
 hooks     = ["layout.authenticated_sidebar"]
 routes    = false
+
+# ── Configuration ─────────────────────────────────────────────────────────
+# The defaults are Cloudflare's documented Turnstile TEST keys, which always
+# pass, so development works out of the box. A production product sets its
+# real pair in its own .env; the widget is invisible until both are real.
+[tool.splent.config]
+TURNSTILE_SITE_KEY = "1x00000000000000000000AA"
+TURNSTILE_SECRET_KEY = "1x0000000000000000000000000000000AA"
