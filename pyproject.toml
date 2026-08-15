@@ -47,7 +47,7 @@ docker     = []
 [tool.splent.contract.requires]
 features = ["settings"]
 env_vars = ["TURNSTILE_SECRET_KEY", "TURNSTILE_SITE_KEY"]
-signals  = ["comment-submitting", "contact-submitting"]
+signals  = ["careers-submitting", "comment-submitting", "contact-submitting"]
 
 [tool.splent.contract.extensible]
 services  = ["CaptchaService"]
